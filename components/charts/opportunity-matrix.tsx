@@ -101,15 +101,16 @@ export function OpportunityDissatisfactionMatrix() {
                   domain={[0, 10]}
                   ticks={[0, 2, 4, 5, 6, 8, 10]}
                   name="Opportunity"
-                  tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                  tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
                   tickLine={false}
                   axisLine={{ stroke: 'hsl(var(--border))' }}
                   label={{
                     value: 'Market Opportunity Score',
                     position: 'bottom',
                     offset: 15,
-                    fontSize: 11,
-                    fill: 'hsl(var(--muted-foreground))',
+                    fontSize: 13,
+                    fill: 'hsl(var(--foreground))',
+                    fontWeight: 500,
                   }}
                 />
                 <YAxis
@@ -118,7 +119,7 @@ export function OpportunityDissatisfactionMatrix() {
                   domain={[0, 10]}
                   ticks={[0, 2, 4, 5, 6, 8, 10]}
                   name="Dissatisfaction"
-                  tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
+                  tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
                   tickLine={false}
                   axisLine={{ stroke: 'hsl(var(--border))' }}
                   label={{
@@ -126,8 +127,9 @@ export function OpportunityDissatisfactionMatrix() {
                     angle: -90,
                     position: 'insideLeft',
                     offset: 10,
-                    fontSize: 11,
-                    fill: 'hsl(var(--muted-foreground))',
+                    fontSize: 13,
+                    fill: 'hsl(var(--foreground))',
+                    fontWeight: 500,
                   }}
                 />
                 <ZAxis type="number" dataKey="z" range={[80, 300]} />
@@ -164,9 +166,10 @@ export function OpportunityDissatisfactionMatrix() {
                     position="top" 
                     offset={12}
                     style={{ 
-                      fontSize: '9px', 
-                      fill: 'hsl(var(--muted-foreground))',
-                      fontWeight: 500,
+                      fontSize: '12px', 
+                      fill: 'hsl(var(--foreground))',
+                      fontWeight: 600,
+                      textShadow: '0 0 4px hsl(var(--background)), 0 0 4px hsl(var(--background))'
                     }} 
                   />
                 </Scatter>
