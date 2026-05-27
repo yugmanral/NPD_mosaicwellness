@@ -77,7 +77,6 @@ export function ExecutiveKPIs() {
       <KPICard
         label="Total Reviews"
         value={`${kpis.totalReviews.toLocaleString()} Reviews Analyzed`}
-        insight="Dataset completeness confirmed. Statistical significance threshold achieved for all underlying platform metrics."
         sparklineData={kpis.complaintsSparkline}
         delay={0}
       />
@@ -85,14 +84,12 @@ export function ExecutiveKPIs() {
         label="Average Rating"
         value={`${kpis.avgRating}/5`}
         trend={kpis.avgRating >= 3 ? 5 : -5}
-        insight="Personalization and progress-tracking gaps continue to drive dissatisfaction."
         sparklineData={kpis.ratingSparkline}
         delay={0.05}
       />
       <KPICard
         label="Highest Risk Category"
         value={kpis.highestRiskCategory}
-        insight="Trust-related complaints remain concentrated in wellness and supplement categories."
         delay={0.1}
       />
       <KPICard
@@ -109,20 +106,17 @@ export function ExecutiveKPIs() {
               </div>
             )
         }
-        insight="Driven by elevated trust-deficit, personalization, and progress-tracking complaints."
         delay={0.15}
       />
       <KPICard
         label="Verified Purchase %"
         value={`${kpis.verifiedPurchasePercent}%`}
         trend={kpis.verifiedPurchasePercent >= 50 ? 8 : -3}
-        insight="High verification indicates that complaints stem from actual product usage rather than reputational noise."
         delay={0.2}
       />
       <KPICard
         label="Avg Helpful Votes"
         value={kpis.avgHelpfulVotes}
-        insight="Ingredient transparency concerns show unusually high engagement intensity."
         sparklineData={kpis.helpfulSparkline}
         delay={0.25}
       />

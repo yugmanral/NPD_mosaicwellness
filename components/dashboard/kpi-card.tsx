@@ -10,7 +10,7 @@ interface KPICardProps {
   label: string
   value: string | number
   trend?: number
-  insight: string
+  insight?: string
   sparklineData?: number[]
   className?: string
   delay?: number
@@ -73,10 +73,11 @@ export function KPICard({
               <Sparkline data={sparklineData} />
             )}
           </div>
-          
-          <p className="mt-3 text-xs text-muted-foreground leading-relaxed line-clamp-2">
-            {insight}
-          </p>
+          {insight && (
+            <p className="mt-3 text-xs text-muted-foreground leading-relaxed line-clamp-2">
+              {insight}
+            </p>
+          )}
         </CardContent>
       </Card>
     </motion.div>
