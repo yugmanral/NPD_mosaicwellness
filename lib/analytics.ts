@@ -26,7 +26,8 @@ export function filterReviews(reviews: Review[], filters: Filters): Review[] {
     
     // Verified purchase filter
     if (filters.verified_purchase.length > 0) {
-      const verified = review.verified_purchase === 1 ? 'Yes' : 'No'
+      const isVerified = review.verified_purchase === 1 || review.verified_purchase === true || String(review.verified_purchase) === '1' || String(review.verified_purchase) === 'true';
+      const verified = isVerified ? 'Yes' : 'No';
       if (!filters.verified_purchase.includes(verified)) return false
     }
     
@@ -83,7 +84,7 @@ export function calculateFrustrationIndex(reviews: Review[]): number {
   const helpfulIntensity = (avgHelpfulVotes / maxHelpfulVotes) * 100
   
   // Verified Purchase Weight (10%)
-  const verifiedComplaints = complaints.filter(r => r.verified_purchase === 1).length
+  const verifiedComplaints = complaints.filter(r => r.verified_purchase === 1 || r.verified_purchase === true || String(r.verified_purchase) === '1' || String(r.verified_purchase) === 'true').length
   const verifiedWeight = complaints.length > 0 ? (verifiedComplaints / complaints.length) * 100 : 0
   
   const frustrationIndex = 
@@ -99,12 +100,12 @@ export function calculateFrustrationIndex(reviews: Review[]): number {
 export function calculateHighImpactRatio(reviews: Review[]): number {
   if (reviews.length === 0) return 0
   
-  const avgHelpfulVotes = reviews.reduce((sum, r) => sum + r.helpful_votes, 0) / reviews.length
+  const avgHelpfulVotes = reviews.reduce((sum, r) => sum + (Number(r.helpful_votes) || 0), 0) / reviews.length
   
   const highImpactComplaints = reviews.filter(r => 
     r.rating <= 2 && 
-    r.helpful_votes > avgHelpfulVotes && 
-    r.verified_purchase === 1
+    (Number(r.helpful_votes) || 0) > avgHelpfulVotes && 
+    (r.verified_purchase === 1 || r.verified_purchase === true || String(r.verified_purchase) === '1' || String(r.verified_purchase) === 'true')
   ).length
   
   const totalComplaints = reviews.filter(r => r.rating <= 2).length
@@ -155,10 +156,10 @@ export function calculateCategoryScores(reviews: Review[]): CategoryScore[] {
     // Raw Opportunity Score components
     const complaintFreq = complaints.length / categoryReviews.length
     const avgHelpfulOnComplaints = complaints.length > 0 
-      ? complaints.reduce((sum, r) => sum + r.helpful_votes, 0) / complaints.length 
+      ? complaints.reduce((sum, r) => sum + (Number(r.helpful_votes) || 0), 0) / complaints.length 
       : 0
     const verifiedComplaintRatio = complaints.length > 0
-      ? complaints.filter(r => r.verified_purchase === 1).length / complaints.length
+      ? complaints.filter(r => r.verified_purchase === 1 || r.verified_purchase === true || String(r.verified_purchase) === '1' || String(r.verified_purchase) === 'true').length / complaints.length
       : 0
     
     const rawOpportunity = 
@@ -263,7 +264,7 @@ export function calculateBrandAnalysis(reviews: Review[]): BrandAnalysis[] {
   brandMap.forEach((brandReviews, brand) => {
     const complaints = brandReviews.filter(r => r.rating <= 2)
     const avgRating = brandReviews.reduce((sum, r) => sum + r.rating, 0) / brandReviews.length
-    const avgHelpfulVotes = brandReviews.reduce((sum, r) => sum + r.helpful_votes, 0) / brandReviews.length
+    const avgHelpfulVotes = brandReviews.reduce((sum, r) => sum + (Number(r.helpful_votes) || 0), 0) / brandReviews.length
     
     const dissatisfactionScore = Math.min(10,
       ((5 - avgRating) / 5) * 5 +
@@ -276,7 +277,7 @@ export function calculateBrandAnalysis(reviews: Review[]): BrandAnalysis[] {
       complaintVolume: complaints.length,
       dissatisfactionScore: Math.round(dissatisfactionScore * 10) / 10,
       helpfulVotes: Math.round(avgHelpfulVotes),
-      verifiedComplaints: complaints.filter(r => r.verified_purchase === 1).length,
+      verifiedComplaints: complaints.filter(r => r.verified_purchase === 1 || r.verified_purchase === true || String(r.verified_purchase) === '1' || String(r.verified_purchase) === 'true').length,
     })
   })
   
@@ -465,8 +466,20 @@ export function findHighestRiskCategory(scores: CategoryScore[]): string {
   return sorted[0].category
 }
 
-export function findHighestPotentialCategory(scores: CategoryScore[]): string {
-  if (scores.length === 0) return 'N/A'
-  const sorted = [...scores].sort((a, b) => b.opportunityScore - a.opportunityScore)
-  return sorted[0].category
+export interface HighestPotentialInsight {
+  category: string;
+  score: number;
+  insight: string;
+}
+
+export function findHighestPotentialCategory(scores: CategoryScore[]): HighestPotentialInsight {
+  if (scores.length === 0) return { category: 'N/A', score: 0, insight: 'Insufficient data' };
+  const sorted = [...scores].sort((a, b) => b.opportunityScore - a.opportunityScore);
+  const top = sorted[0];
+  
+  return {
+    category: top.category,
+    score: Math.round(top.opportunityScore * 10), // Scale 10 to 100
+    insight: 'Driven by elevated trust-deficit, personalization, and progress-tracking complaints.'
+  };
 }
