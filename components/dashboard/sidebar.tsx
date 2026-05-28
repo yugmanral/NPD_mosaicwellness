@@ -12,10 +12,12 @@ import {
   TrendingUp,
   MessageSquare,
   Grid3X3,
+  Package,
 } from 'lucide-react'
 
 const navigation = [
   { name: 'Executive KPIs', href: '/', icon: LayoutDashboard },
+  { name: 'Products', href: '/products', icon: Package },
   { name: 'Competitor Intelligence', href: '/competitor-intelligence', icon: Target },
   { name: 'Category Opportunity', href: '/category-opportunity', icon: BarChart3 },
   { name: 'Ratings & Sentiment', href: '/ratings-sentiment', icon: TrendingUp },
