@@ -37,6 +37,11 @@ export function filterReviews(reviews: Review[], filters: Filters): Review[] {
       if (filters.date_range[0] && reviewDate < filters.date_range[0]) return false
       if (filters.date_range[1] && reviewDate > filters.date_range[1]) return false
     }
+
+    // Product filter
+    if (filters.product_reviewed && filters.product_reviewed.length > 0) {
+      if (!filters.product_reviewed.includes(review.product_reviewed)) return false
+    }
     
     return true
   })

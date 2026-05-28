@@ -30,6 +30,7 @@ export interface Filters {
   rating_bin: string[]
   verified_purchase: string[]
   date_range: [Date | null, Date | null]
+  product_reviewed: string[]
 }
 
 export interface KPIMetric {

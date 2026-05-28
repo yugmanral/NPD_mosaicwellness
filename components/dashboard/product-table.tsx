@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
+import Link from 'next/link'
 import {
   Table,
   TableBody,
@@ -11,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { useData } from '@/context/data-context'
-import type { Review } from '@/lib/types'
+import { ArrowUpDown, ArrowDown, ArrowUp, ExternalLink } from 'lucide-react'
 
 interface ProductStat {
   productName: string
@@ -21,10 +22,25 @@ interface ProductStat {
   avgRating: number
   verifiedCount: number
   complaintCount: number
+  complaintRate?: number
+  verifiedRate?: number
 }
+
+type SortKey = keyof ProductStat
 
 export function ProductTable() {
   const { filteredReviews, isLoading } = useData()
+  const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'asc' | 'desc' }>({
+    key: 'totalReviews',
+    direction: 'desc',
+  })
+
+  const handleSort = (key: SortKey) => {
+    setSortConfig(current => ({
+      key,
+      direction: current.key === key && current.direction === 'desc' ? 'asc' : 'desc',
+    }))
+  }
 
   const productStats = useMemo(() => {
     if (!filteredReviews || filteredReviews.length === 0) return []
@@ -61,9 +77,29 @@ export function ProductTable() {
       verifiedRate: Number(((stat.verifiedCount / stat.totalReviews) * 100).toFixed(1)),
     }))
 
-    // Sort by total reviews descending
-    return result.sort((a, b) => b.totalReviews - a.totalReviews)
-  }, [filteredReviews])
+    return result.sort((a, b) => {
+      const valA = a[sortConfig.key]
+      const valB = b[sortConfig.key]
+
+      if (typeof valA === 'string' && typeof valB === 'string') {
+        return sortConfig.direction === 'asc' 
+          ? valA.localeCompare(valB) 
+          : valB.localeCompare(valA)
+      }
+
+      const numA = (valA as number) || 0
+      const numB = (valB as number) || 0
+
+      return sortConfig.direction === 'asc' ? numA - numB : numB - numA
+    })
+  }, [filteredReviews, sortConfig])
+
+  const renderSortIcon = (key: SortKey) => {
+    if (sortConfig.key !== key) return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground/50 inline-block" />
+    return sortConfig.direction === 'asc' 
+      ? <ArrowUp className="ml-2 h-4 w-4 text-foreground inline-block" />
+      : <ArrowDown className="ml-2 h-4 w-4 text-foreground inline-block" />
+  }
 
   if (isLoading) {
     return (
@@ -103,18 +139,54 @@ export function ProductTable() {
           <Table>
             <TableHeader className="bg-muted/50">
               <TableRow>
-                <TableHead className="w-[300px] text-foreground font-semibold">Product Name</TableHead>
-                <TableHead className="text-foreground font-semibold">Brand</TableHead>
-                <TableHead className="text-foreground font-semibold">Category</TableHead>
-                <TableHead className="text-right text-foreground font-semibold">Total Reviews</TableHead>
-                <TableHead className="text-right text-foreground font-semibold">Avg Rating</TableHead>
-                <TableHead className="text-right text-foreground font-semibold">Verified %</TableHead>
-                <TableHead className="text-right text-foreground font-semibold">Complaint %</TableHead>
+                <TableHead 
+                  className="w-[300px] text-foreground font-semibold cursor-pointer hover:bg-muted/80 transition-colors select-none"
+                  onClick={() => handleSort('productName')}
+                >
+                  Product Name {renderSortIcon('productName')}
+                </TableHead>
+                <TableHead 
+                  className="text-foreground font-semibold cursor-pointer hover:bg-muted/80 transition-colors select-none"
+                  onClick={() => handleSort('brand')}
+                >
+                  Brand {renderSortIcon('brand')}
+                </TableHead>
+                <TableHead 
+                  className="text-foreground font-semibold cursor-pointer hover:bg-muted/80 transition-colors select-none"
+                  onClick={() => handleSort('category')}
+                >
+                  Category {renderSortIcon('category')}
+                </TableHead>
+                <TableHead 
+                  className="text-right text-foreground font-semibold cursor-pointer hover:bg-muted/80 transition-colors select-none"
+                  onClick={() => handleSort('totalReviews')}
+                >
+                  Total Reviews {renderSortIcon('totalReviews')}
+                </TableHead>
+                <TableHead 
+                  className="text-right text-foreground font-semibold cursor-pointer hover:bg-muted/80 transition-colors select-none"
+                  onClick={() => handleSort('avgRating')}
+                >
+                  Avg Rating {renderSortIcon('avgRating')}
+                </TableHead>
+                <TableHead 
+                  className="text-right text-foreground font-semibold cursor-pointer hover:bg-muted/80 transition-colors select-none"
+                  onClick={() => handleSort('verifiedRate')}
+                >
+                  Verified % {renderSortIcon('verifiedRate')}
+                </TableHead>
+                <TableHead 
+                  className="text-right text-foreground font-semibold cursor-pointer hover:bg-muted/80 transition-colors select-none"
+                  onClick={() => handleSort('complaintRate')}
+                >
+                  Complaint % {renderSortIcon('complaintRate')}
+                </TableHead>
+                <TableHead className="w-[100px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {productStats.map((product, idx) => (
-                <TableRow key={`${product.productName}-${idx}`} className="hover:bg-accent/50 transition-colors">
+                <TableRow key={`${product.productName}-${idx}`} className="hover:bg-accent/50 transition-colors group">
                   <TableCell className="font-medium text-foreground">
                     {product.productName}
                   </TableCell>
@@ -132,9 +204,18 @@ export function ProductTable() {
                   </TableCell>
                   <TableCell className="text-right text-muted-foreground">{product.verifiedRate}%</TableCell>
                   <TableCell className="text-right">
-                    <span className={product.complaintRate > 20 ? 'text-red-500 font-medium' : 'text-muted-foreground'}>
+                    <span className={(product.complaintRate || 0) > 20 ? 'text-red-500 font-medium' : 'text-muted-foreground'}>
                       {product.complaintRate}%
                     </span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Link 
+                      href={`/review-intelligence?product=${encodeURIComponent(product.productName)}`}
+                      className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 px-3 py-2 opacity-0 group-hover:opacity-100 focus:opacity-100"
+                      title={`View Review Intelligence for ${product.productName}`}
+                    >
+                      <ExternalLink className="h-4 w-4 text-primary" />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

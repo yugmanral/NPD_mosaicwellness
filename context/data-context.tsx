@@ -25,6 +25,7 @@ const initialFilters: Filters = {
   rating_bin: [],
   verified_purchase: [],
   date_range: [null, null],
+  product_reviewed: [],
 }
 
 const DataContext = createContext<DataContextType | null>(null)
