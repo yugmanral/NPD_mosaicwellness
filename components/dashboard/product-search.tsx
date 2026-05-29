@@ -1,16 +1,14 @@
-'use client'
+"use client"
 
 import React, { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { useData } from '@/context/data-context'
 
-export function ProductSearch() {
+export function ProductSearch({ initialProduct = '' }: { initialProduct?: string }) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const currentProduct = searchParams.get('product') || ''
-  const [searchTerm, setSearchTerm] = useState(currentProduct)
+  const [searchTerm, setSearchTerm] = useState(initialProduct)
   const { uniqueValues } = useData()
 
   // We could use uniqueValues to provide an autocomplete dropdown if we wanted,
@@ -19,17 +17,15 @@ export function ProductSearch() {
   // Debounce the search input
   useEffect(() => {
     const timer = setTimeout(() => {
-      const params = new URLSearchParams(searchParams.toString())
       if (searchTerm) {
-        params.set('product', searchTerm)
+        router.push(`/review-intelligence?product=${encodeURIComponent(searchTerm)}`)
       } else {
-        params.delete('product')
+        router.push(`/review-intelligence`)
       }
-      router.push(`/review-intelligence?${params.toString()}`)
     }, 500) // 500ms debounce
 
     return () => clearTimeout(timer)
-  }, [searchTerm, router, searchParams])
+  }, [searchTerm, router])
 
   return (
     <div className="relative w-full max-w-sm mb-6">

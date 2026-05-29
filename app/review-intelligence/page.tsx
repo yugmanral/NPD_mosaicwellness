@@ -21,7 +21,7 @@ export default function ReviewIntelligencePage({
               AI-powered analysis of customer feedback themes and patterns
             </p>
           </div>
-          <ProductSearch />
+          <ProductSearch initialProduct={product} />
         </div>
 
         <ExecutiveKPIs />
