@@ -34,11 +34,17 @@ export function ProductSearch({ initialProduct = '' }: { initialProduct?: string
       </div>
       <Input
         type="text"
-        placeholder="Search for a specific product..."
+        list="product-list"
+        placeholder="Search or select a product..."
         className="pl-10 bg-card/50 border-border/50"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
+      <datalist id="product-list">
+        {uniqueValues?.products?.map((product) => (
+          <option key={product} value={product} />
+        ))}
+      </datalist>
     </div>
   )
 }

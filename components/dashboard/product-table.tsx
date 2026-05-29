@@ -31,7 +31,7 @@ type SortKey = keyof ProductStat
 export function ProductTable() {
   const { filteredReviews, isLoading } = useData()
   const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'asc' | 'desc' }>({
-    key: 'totalReviews',
+    key: 'complaintRate',
     direction: 'desc',
   })
 

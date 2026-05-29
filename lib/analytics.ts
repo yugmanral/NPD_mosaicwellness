@@ -55,12 +55,12 @@ export function getRatingBin(rating: number): string {
   return 'High'
 }
 
-// Extract unique values for filters
 export function getUniqueValues(reviews: Review[]) {
   return {
     brands: [...new Set(reviews.map(r => r.competitor_brand))].sort(),
     categories: [...new Set(reviews.map(r => r.competitor_category))].sort(),
     platforms: [...new Set(reviews.map(r => r.platform))].sort(),
+    products: [...new Set(reviews.map(r => r.product_reviewed))].filter(Boolean).sort(),
     dateRange: getDateRange(reviews),
   }
 }
