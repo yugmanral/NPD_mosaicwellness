@@ -9,7 +9,7 @@ export async function fetchAllReviews(): Promise<Review[]> {
   }
   
   const firstData = await firstResponse.json()
-  const totalPages = firstData.pagination.total_pages || 1
+  const totalPages = firstData.pagination?.totalPages || firstData.pagination?.total_pages || 1
   const allReviews: Review[] = [...firstData.data]
   
   // Fetch remaining pages in batches of 5 to avoid connection limits and rate limiting

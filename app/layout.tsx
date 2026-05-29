@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Consumer Intelligence Dashboard | X',
+  title: 'The Next Protégé',
   description: 'Executive analytics dashboard for strategic consumer insights, market opportunity identification, and product innovation direction.',
   keywords: ['analytics', 'dashboard', 'consumer intelligence', 'reviews', 'market analysis'],
 }

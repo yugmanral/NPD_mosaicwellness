@@ -37,7 +37,7 @@ export function Sidebar() {
             <span className="text-sm font-bold text-primary-foreground">X</span>
           </div>
           <div>
-            <h1 className="text-sm font-semibold text-foreground">Consumer Intel</h1>
+            <h1 className="text-sm font-semibold text-foreground">The Next Protégé</h1>
             <p className="text-xs text-muted-foreground">Executive Dashboard</p>
           </div>
         </div>
@@ -81,7 +81,7 @@ export function Sidebar() {
         {/* Footer */}
         <div className="border-t border-border p-4">
           <p className="text-xs text-muted-foreground">
-            Powered by Consumer Intelligence
+            Powered by The Next Protégé
           </p>
         </div>
       </div>
