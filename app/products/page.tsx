@@ -1,6 +1,5 @@
 import { DashboardLayout } from '@/components/dashboard'
 import { ProductTable } from '@/components/dashboard/product-table'
-import { ProductKPIs } from '@/components/dashboard/product-kpis'
 
 export default function ProductsPage() {
   return (
@@ -12,8 +11,6 @@ export default function ProductsPage() {
             Detailed performance metrics and feedback analysis across all tracked products
           </p>
         </div>
-
-        <ProductKPIs />
 
         <ProductTable />
       </div>
