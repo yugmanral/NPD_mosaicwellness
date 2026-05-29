@@ -1,4 +1,4 @@
-import { DashboardLayout, ExecutiveKPIs } from '@/components/dashboard'
+import { DashboardLayout } from '@/components/dashboard'
 import { ComplaintThemesAnalysis, TrendAnalysisChart } from '@/components/charts'
 import { SyncProductFilter } from '@/components/dashboard/sync-product-filter'
 import { ProductSearch } from '@/components/dashboard/product-search'
@@ -23,8 +23,6 @@ export default function ReviewIntelligencePage({
           </div>
           <ProductSearch initialProduct={product} />
         </div>
-
-        <ExecutiveKPIs />
 
         <ComplaintThemesAnalysis />
 

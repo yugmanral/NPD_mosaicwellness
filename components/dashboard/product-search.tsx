@@ -9,23 +9,22 @@ import { useData } from '@/context/data-context'
 export function ProductSearch({ initialProduct = '' }: { initialProduct?: string }) {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState(initialProduct)
-  const { uniqueValues } = useData()
+  const { uniqueValues, updateFilter } = useData()
 
-  // We could use uniqueValues to provide an autocomplete dropdown if we wanted,
-  // but a simple text search updating the URL is sufficient for now.
-  
   // Debounce the search input
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchTerm) {
+        updateFilter('product_reviewed', [searchTerm])
         router.push(`/review-intelligence?product=${encodeURIComponent(searchTerm)}`)
       } else {
+        updateFilter('product_reviewed', [])
         router.push(`/review-intelligence`)
       }
     }, 500) // 500ms debounce
 
     return () => clearTimeout(timer)
-  }, [searchTerm, router])
+  }, [searchTerm, router, updateFilter])
 
   return (
     <div className="relative w-full max-w-sm mb-6">
