@@ -1,8 +1,5 @@
 # Mosaic Wellness - NPD Dashboard
-
-![Mosaic Wellness NPD Dashboard](https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop)
-
-This is the New Product Development (NPD) dashboard and landing page for Mosaic Wellness. It provides a central hub for tracking, managing, and launching new health and wellness products across brands like Bodywise and Man Matters.
+This is my submission for the problem statement of New Product Development (NPD) for the Builder Challenge of Mosaic Wellness Fellowship program.
 
 ## Technologies Used
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
@@ -28,7 +25,3 @@ This is the New Product Development (NPD) dashboard and landing page for Mosaic 
 - `app/` - Contains the App Router layouts, pages, and global styles.
 - `components/ui/` - Contains reusable Shadcn UI components.
 - `lib/` - Contains utility functions (like `cn` for tailwind-merge).
-
-## Deployment
-
-This project is automatically configured for deployment on Vercel. Pushing to the `main` branch will trigger a production deployment to the Vercel project (`prj_r5J0hvXwQkuQpsn9K30GvFKmgDg1`).
